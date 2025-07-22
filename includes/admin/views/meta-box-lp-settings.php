@@ -70,6 +70,77 @@ if (!defined('ABSPATH')) exit;
                            data-default-color="#ffffff">
                 </td>
             </tr>
+            
+            <tr>
+                <th scope="row"><?php _e('パディング（上下）', 'finelive-lp'); ?></th>
+                <td>
+                    <input type="number" 
+                           name="flp_lp_data[btn_padding_tb]" 
+                           value="<?php echo esc_attr($data['btn_padding_tb']); ?>" 
+                           min="0" 
+                           max="50" 
+                           class="small-text"> px
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row"><?php _e('パディング（左右）', 'finelive-lp'); ?></th>
+                <td>
+                    <input type="number" 
+                           name="flp_lp_data[btn_padding_lr]" 
+                           value="<?php echo esc_attr($data['btn_padding_lr']); ?>" 
+                           min="0" 
+                           max="100" 
+                           class="small-text"> px
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row"><?php _e('角の丸み', 'finelive-lp'); ?></th>
+                <td>
+                    <input type="number" 
+                           name="flp_lp_data[btn_border_radius]" 
+                           value="<?php echo esc_attr($data['btn_border_radius']); ?>" 
+                           min="0" 
+                           max="50" 
+                           class="small-text"> px
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- LP表示期間設定セクション -->
+    <div class="flp-section">
+        <h3><?php _e('LP表示期間設定', 'finelive-lp'); ?></h3>
+        
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="flp_display_start_date"><?php _e('表示開始日', 'finelive-lp'); ?></label>
+                </th>
+                <td>
+                    <input type="date" 
+                           id="flp_display_start_date" 
+                           name="flp_lp_data[display_start_date]" 
+                           value="<?php echo esc_attr($data['display_start_date']); ?>" 
+                           class="flp-datepicker">
+                    <p class="description"><?php _e('空欄の場合は即時表示', 'finelive-lp'); ?></p>
+                </td>
+            </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="flp_display_end_date"><?php _e('表示終了日', 'finelive-lp'); ?></label>
+                </th>
+                <td>
+                    <input type="date" 
+                           id="flp_display_end_date" 
+                           name="flp_lp_data[display_end_date]" 
+                           value="<?php echo esc_attr($data['display_end_date']); ?>" 
+                           class="flp-datepicker">
+                    <p class="description"><?php _e('空欄の場合は無期限表示', 'finelive-lp'); ?></p>
+                </td>
+            </tr>
         </table>
     </div>
 
