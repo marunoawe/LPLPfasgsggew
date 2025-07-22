@@ -1,0 +1,616 @@
+/* FineLive Multi LP Display - Admin Styles */
+
+/* ===== メタボックス共通スタイル ===== */
+.flp-meta-box-content {
+    padding: 0;
+}
+
+.flp-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.flp-section:last-child {
+    border-bottom: none;
+}
+
+.flp-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding: 0;
+    color: #23282d;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ===== 画像アイテム管理 ===== */
+.flp-image-items {
+    border: 1px solid #c3c4c7;
+    padding: 15px;
+    margin-top: 10px;
+    background-color: #f6f7f7;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    min-height: 80px;
+}
+
+.flp-image-items:empty::before {
+    content: "画像を追加してください";
+    color: #666;
+    font-style: italic;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.flp-image-items .item {
+    border: 1px solid #dcdcde;
+    padding: 12px;
+    background-color: #fff;
+    text-align: center;
+    max-width: 180px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.flp-image-items .item:hover {
+    border-color: #007cba;
+    box-shadow: 0 2px 8px rgba(0, 124, 186, 0.1);
+}
+
+.flp-image-items .item img {
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.flp-image-items .item p {
+    margin: 8px 0;
+    width: 100%;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.flp-image-items .item label {
+    display: block;
+    margin: 5px 0;
+    text-align: left;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.flp-image-items .item label input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.flp-image-items .item button {
+    margin: 3px 2px;
+    width: calc(100% - 8px);
+    font-size: 12px;
+}
+
+/* ===== ボタンプレビュー ===== */
+.flp-button-preview-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.flp-button-preview-wrapper {
+    padding: 25px;
+    background: linear-gradient(45deg, #f9f9f9 25%, transparent 25%), 
+                linear-gradient(-45deg, #f9f9f9 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f9f9f9 75%), 
+                linear-gradient(-45deg, transparent 75%, #f9f9f9 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#flp-button-preview {
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 1;
+}
+
+#flp-button-preview:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== フォーム要素スタイル ===== */
+.flp-form-row {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.flp-form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.flp-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.flp-form-group .description {
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* カラーピッカーカスタマイズ */
+.wp-picker-container {
+    margin-bottom: 10px;
+}
+
+.wp-picker-container .wp-color-result {
+    height: 32px;
+    border-radius: 3px;
+}
+
+/* ===== 使い方ガイドスタイル ===== */
+.flp-usage-guide-box {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.flp-usage-guide-box h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0073aa;
+}
+
+.flp-usage-guide-box .dashicons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.flp-quick-tips {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.flp-quick-tips h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.flp-quick-tips ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.flp-quick-tips li {
+    margin-bottom: 5px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #666;
+}
+
+/* ===== ショートコード情報 ===== */
+.flp-shortcode-info {
+    font-size: 14px;
+}
+
+.flp-shortcode-info input[type="text"] {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 13px;
+    background: #f8f9fa;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    padding: 8px 10px;
+    cursor: text;
+    user-select: all;
+}
+
+.flp-shortcode-info input[type="text"]:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 1px #007cba;
+    outline: none;
+}
+
+/* ===== 統計情報 ===== */
+.flp-stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.flp-stat-box {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.flp-stat-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #23282d;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.flp-stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0073aa;
+    display: block;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+.flp-stat-label {
+    color: #666;
+    font-size: 14px;
+    display: block;
+}
+
+/* ===== 通知・エラーメッセージ ===== */
+.flp-notice {
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.flp-notice.notice-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.flp-notice.notice-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.flp-notice.notice-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.flp-notice.notice-info {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* ===== 投稿一覧カスタムカラム ===== */
+.column-lp_id {
+    width: 80px;
+}
+
+.column-shortcode {
+    width: 200px;
+}
+
+.column-display_period {
+    width: 150px;
+}
+
+.column-button_clicks {
+    width: 120px;
+}
+
+.column-last_modified {
+    width: 120px;
+}
+
+/* ショートコード表示 */
+.column-shortcode input {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 11px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    padding: 2px 4px;
+    cursor: pointer;
+    user-select: all;
+}
+
+.column-shortcode input:focus {
+    border-color: #007cba;
+    outline: none;
+}
+
+/* ===== フィルターフォーム ===== */
+.flp-filter-form {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.flp-filter-form .form-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.flp-filter-form .form-group {
+    min-width: 150px;
+}
+
+.flp-filter-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.flp-filter-form select,
+.flp-filter-form input {
+    width: 100%;
+}
+
+/* ===== レポートテーブル ===== */
+.flp-report-table {
+    background: white;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.flp-report-table .wp-list-table {
+    border: none;
+    margin: 0;
+}
+
+.flp-report-table th,
+.flp-report-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.flp-report-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.flp-report-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* ===== レスポンシブ対応 ===== */
+@media screen and (max-width: 782px) {
+    .flp-image-items {
+        gap: 10px;
+    }
+    
+    .flp-image-items .item {
+        max-width: 150px;
+    }
+    
+    .flp-form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .flp-stats-summary {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .flp-filter-form .form-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .column-shortcode,
+    .column-display_period,
+    .column-button_clicks {
+        display: none;
+    }
+}
+
+/* ===== アニメーション ===== */
+.flp-fade-in {
+    animation: flpFadeIn 0.3s ease-out;
+}
+
+@keyframes flpFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.flp-pulse {
+    animation: flpPulse 2s infinite;
+}
+
+@keyframes flpPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ===== ローディング状態 ===== */
+.flp-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.flp-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: flpSpin 1s linear infinite;
+}
+
+@keyframes flpSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== ツールチップ ===== */
+.flp-tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.flp-tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.3;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.flp-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.flp-tooltip:hover::before,
+.flp-tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== 印刷用スタイル ===== */
+@media print {
+    .flp-image-items .item button,
+    .flp-filter-form,
+    .page-title-action,
+    .tablenav {
+        display: none !important;
+    }
+    
+    .flp-stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        page-break-inside: avoid;
+    }
+    
+    .flp-report-table {
+        font-size: 12px;
+    }
+}
+
+/* ===== アクセシビリティ向上 ===== */
+.flp-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* フォーカス可視化 */
+.flp-image-items .item:focus-within {
+    border-color: #007cba;
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+
+button:focus,
+.button:focus {
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.5);
+    outline: none;
+}
+
+/* ===== ダークモード対応（実験的） ===== */
+@media (prefers-color-scheme: dark) {
+    .flp-image-items {
+        background-color: #2c3338;
+        border-color: #50575e;
+    }
+    
+    .flp-image-items .item {
+        background-color: #1d2327;
+        border-color: #3c434a;
+        color: #c3c4c7;
+    }
+    
+    .flp-button-preview-wrapper {
+        background: #1d2327;
+        border-color: #3c434a;
+    }
+    
+    .flp-stat-box {
+        background: #1d2327;
+        border-color: #3c434a;
+        color: #c3c4c7;
+    }
+}

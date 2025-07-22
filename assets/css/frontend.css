@@ -1,0 +1,602 @@
+/* FineLive Multi LP Display - Frontend Styles */
+
+/* ===== LP基本レイアウト ===== */
+.flp_lp_wrap {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1;
+}
+
+.flp_lp_wrap * {
+    box-sizing: border-box;
+}
+
+.flp_block {
+    margin-bottom: 20px;
+    animation: flp_fadeIn 0.6s ease-out;
+}
+
+.flp_block:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== 静的画像スタイル ===== */
+.flp_static_image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 0;
+    vertical-align: top;
+}
+
+/* 画像の読み込み効果 */
+.flp_static_image {
+    transition: opacity 0.3s ease;
+}
+
+.flp_static_image[loading="lazy"] {
+    opacity: 0;
+}
+
+.flp_static_image.loaded {
+    opacity: 1;
+}
+
+/* ===== ボタンスタイル ===== */
+.flp_btn_wrap {
+    text-align: center;
+    margin: 20px 0;
+    animation: flp_slideUp 0.8s ease-out 0.3s both;
+}
+
+.flp_btn {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    vertical-align: top;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* デフォルトスタイル */
+    background-color: #ff4081;
+    color: #ffffff;
+    padding: 15px 30px;
+    border-radius: 5px;
+}
+
+/* ボタンのホバー効果 */
+.flp_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+.flp_btn:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+.flp_btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* ボタンの波紋効果 */
+.flp_btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+    pointer-events: none;
+}
+
+.flp_btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* ボタンのパルスアニメーション */
+.flp_btn {
+    animation: flp_pulse 2s infinite;
+}
+
+@keyframes flp_pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ボタンのローディング状態 */
+.flp_btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+}
+
+.flp_btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: flp_buttonSpin 1s linear infinite;
+}
+
+@keyframes flp_buttonSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== スライダースタイル ===== */
+.flp_slider {
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    background: #f8f9fa;
+    animation: flp_slideUp 1s ease-out 0.5s both;
+}
+
+.flp_slides_container {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.flp_slide_img {
+    width: 100%;
+    height: auto;
+    flex-shrink: 0;
+    display: block;
+    vertical-align: top;
+    user-select: none;
+}
+
+/* スライダーコントロール */
+.flp_slider_controls {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.flp_slider:hover .flp_slider_controls {
+    opacity: 1;
+}
+
+.flp_slider_dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.flp_slider_dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.flp_slider_dot.active {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.flp_slider_dot:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+}
+
+/* スライダーのプログレスバー（オプション） */
+.flp_slider_progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(255, 64, 129, 0.8);
+    transition: width 0.1s ease;
+    z-index: 5;
+}
+
+/* スライダーのタッチ操作インジケーター */
+.flp_slider::after {
+    content: '👆 タップで次の画像';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .flp_slider:hover::after {
+        opacity: 1;
+    }
+}
+
+/* ===== アニメーション定義 ===== */
+@keyframes flp_fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes flp_slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes flp_bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes flp_shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes flp_glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 64, 129, 0.8);
+    }
+}
+
+@keyframes flp_float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* ===== プレビューモード ===== */
+.flp-preview-wrapper {
+    position: relative;
+    border: 2px dashed #007cba;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.flp-preview-bar {
+    background: #0073aa;
+    color: white;
+    padding: 8px 12px;
+    margin: -2px -2px 10px -2px;
+    border-radius: 4px 4px 0 0;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+}
+
+.flp-preview-bar a {
+    color: #b3d4fc;
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: normal;
+}
+
+.flp-preview-bar a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* ===== エラー・通知スタイル ===== */
+.flp-error,
+.flp-admin-notice {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+    animation: flp_fadeIn 0.5s ease;
+}
+
+.flp-error {
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #742a2a;
+}
+
+.flp-admin-notice {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.flp-error strong,
+.flp-admin-notice strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* ===== レスポンシブ対応 ===== */
+@media screen and (max-width: 768px) {
+    .flp_btn {
+        font-size: 14px;
+        padding: 12px 24px;
+    }
+    
+    .flp_btn_wrap {
+        margin: 15px 0;
+    }
+    
+    .flp_slider_controls {
+        bottom: 10px;
+        gap: 6px;
+    }
+    
+    .flp_slider_dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .flp_block {
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .flp_btn {
+        font-size: 13px;
+        padding: 10px 20px;
+        min-height: 44px; /* タップターゲットサイズ確保 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .flp_btn_wrap {
+        margin: 12px 0;
+    }
+    
+    .flp_slider_controls {
+        bottom: 8px;
+        gap: 4px;
+    }
+    
+    .flp_slider_dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .flp_block {
+        margin-bottom: 12px;
+    }
+}
+
+/* ===== 高解像度ディスプレイ対応 ===== */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi),
+       screen and (min-resolution: 2dppx) {
+    .flp_slider_dot {
+        border: 0.5px solid rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* ===== ダークモード対応 ===== */
+@media (prefers-color-scheme: dark) {
+    .flp_slider {
+        background: #2c2c2c;
+    }
+    
+    .flp_slider_dot {
+        background: rgba(255, 255, 255, 0.4);
+    }
+    
+    .flp_slider_dot:hover {
+        background: rgba(255, 255, 255, 0.6);
+    }
+    
+    .flp_slider_dot.active {
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+    
+    .flp-error {
+        background: #4a1a1a;
+        border-color: #8b3a3a;
+        color: #f8b4b4;
+    }
+    
+    .flp-admin-notice {
+        background: #4a3a1a;
+        border-color: #8b7a3a;
+        color: #f8e4b4;
+    }
+}
+
+/* ===== 印刷用スタイル ===== */
+@media print {
+    .flp_lp_wrap {
+        max-width: none;
+        margin: 0;
+    }
+    
+    .flp_btn {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+        animation: none !important;
+    }
+    
+    .flp_btn::before,
+    .flp_btn::after {
+        display: none !important;
+    }
+    
+    .flp_slider_controls {
+        display: none !important;
+    }
+    
+    .flp_slider {
+        animation: none !important;
+    }
+    
+    .flp_slides_container {
+        transform: none !important;
+    }
+    
+    .flp_slide_img:not(:first-child) {
+        display: none !important;
+    }
+    
+    .flp-preview-bar,
+    .flp-error,
+    .flp-admin-notice {
+        display: none !important;
+    }
+}
+
+/* ===== アクセシビリティ向上 ===== */
+@media (prefers-reduced-motion: reduce) {
+    .flp_btn,
+    .flp_block,
+    .flp_slider,
+    .flp_btn_wrap {
+        animation: none !important;
+    }
+    
+    .flp_slides_container {
+        transition: none !important;
+    }
+    
+    .flp_btn:hover {
+        transform: none !important;
+    }
+    
+    .flp_btn::before {
+        transition: none !important;
+    }
+}
+
+/* フォーカス可視化の改善 */
+.flp_btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.flp_slider:focus-visible {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+.flp_slider_dot:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 1);
+    outline-offset: 2px;
+}
+
+/* ===== パフォーマンス最適化 ===== */
+.flp_lp_wrap {
+    contain: layout style;
+}
+
+.flp_slider {
+    contain: layout;
+    will-change: auto;
+}
+
+.flp_slides_container {
+    contain: layout;
+}
+
+/* GPU加速の有効化 */
+.flp_btn:hover,
+.flp_slides_container,
+.flp_slider_dot {
+    will-change: transform;
+}
+
+/* 不要なGPUレイヤーの削除 */
+.flp_btn:not(:hover) {
+    will-change: auto;
+}
+
+/* ===== カスタマイズ用CSS変数 ===== */
+:root {
+    --flp-animation-duration: 0.3s;
+    --flp-animation-easing: ease;
+    --flp-border-radius: 4px;
+    --flp-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --flp-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --flp-shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* CSS変数を使用したスタイル */
+.flp_btn {
+    transition: all var(--flp-animation-duration) var(--flp-animation-easing);
+    border-radius: var(--flp-border-radius);
+}
+
+.flp_btn:hover {
+    box-shadow: var(--flp-shadow-medium);
+}
+
+.flp_slider {
+    border-radius: var(--flp-border-radius);
+}
