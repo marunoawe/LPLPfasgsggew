@@ -68,7 +68,71 @@ class FLP_Meta_Boxes {
         $data = wp_parse_args($data, $defaults);
 
         // テンプレートファイルを読み込み
-        include FLP_ADMIN_DIR . 'views/meta-box-lp-settings.php';
+        // 修正: ファイルパスを正しく結合
+        $template_file = FLP_ADMIN_DIR . 'views/meta-box-lp-settings.php';
+        
+        // ファイルの存在確認
+        if (file_exists($template_file)) {
+            include $template_file;
+        } else {
+            // エラーハンドリング
+            $error_message = sprintf(
+                __('テンプレートファイルが見つかりません: %s', 'finelive-lp'),
+                $template_file
+            );
+            
+            // 管理者にエラーメッセージを表示
+            if (current_user_can('manage_options')) {
+                echo '<div class="notice notice-error"><p>' . esc_html($error_message) . '</p></div>';
+                error_log('FLP Error: ' . $error_message);
+            }
+            
+            // フォールバック: 基本的なフォームを表示
+            $this->render_fallback_form($data);
+        }
+    }
+
+    /**
+     * フォールバック用のフォーム表示
+     *
+     * @param array $data LP設定データ
+     */
+    private function render_fallback_form($data) {
+        ?>
+        <div class="flp-meta-box-content">
+            <div class="notice notice-warning">
+                <p><?php _e('テンプレートファイルの読み込みに失敗しました。基本的な設定のみ表示しています。', 'finelive-lp'); ?></p>
+            </div>
+            
+            <table class="form-table">
+                <tr>
+                    <th scope="row">
+                        <label for="flp_button_text"><?php _e('ボタンテキスト', 'finelive-lp'); ?></label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="flp_button_text" 
+                               name="flp_lp_data[button_text]" 
+                               value="<?php echo esc_attr($data['button_text']); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <label for="flp_button_url"><?php _e('ボタンURL', 'finelive-lp'); ?></label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="flp_button_url" 
+                               name="flp_lp_data[button_url]" 
+                               value="<?php echo esc_attr($data['button_url']); ?>" 
+                               class="large-text">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php
     }
 
     /**
@@ -119,64 +183,60 @@ class FLP_Meta_Boxes {
         $shortcode = '[finelive_lp id="' . $post->ID . '"]';
         ?>
         <div class="flp-shortcode-info">
+            <p><?php _e('このLPを表示するには、以下のショートコードを投稿や固定ページに貼り付けてください：', 'finelive-lp'); ?></p>
+            
+            <div style="background: #f0f0f0; padding: 10px; border: 1px solid #ddd; font-family: monospace; margin: 10px 0;">
+                <code style="font-size: 13px; user-select: all;"><?php echo esc_html($shortcode); ?></code>
+            </div>
+            
             <p>
-                <strong><?php _e('このLPを表示するショートコード:', 'finelive-lp'); ?></strong>
-            </p>
-            <p>
-                <input type="text" 
-                       value="<?php echo esc_attr($shortcode); ?>" 
-                       readonly 
-                       onclick="this.select()" 
-                       style="width: 100%; font-family: monospace; background: #f1f1f1; border: 1px solid #ccd0d4; padding: 6px 8px; border-radius: 3px;"
-                       title="<?php esc_attr_e('クリックして選択', 'finelive-lp'); ?>">
-            </p>
-            <p class="description">
-                <?php _e('このショートコードを投稿や固定ページにコピー&ペーストしてLPを表示できます。', 'finelive-lp'); ?>
+                <button type="button" class="button button-small" onclick="flpCopyShortcode(this)" data-shortcode="<?php echo esc_attr($shortcode); ?>">
+                    <span class="dashicons dashicons-clipboard" style="vertical-align: middle;"></span>
+                    <?php _e('コピー', 'finelive-lp'); ?>
+                </button>
             </p>
             
-            <?php if ($post->ID): ?>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-                <p><strong><?php _e('統計情報:', 'finelive-lp'); ?></strong></p>
-                <?php $this->display_lp_statistics($post->ID); ?>
-            </div>
+            <script>
+            function flpCopyShortcode(button) {
+                var shortcode = button.getAttribute('data-shortcode');
+                var temp = document.createElement('textarea');
+                temp.value = shortcode;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                
+                button.innerHTML = '<span class="dashicons dashicons-yes" style="vertical-align: middle;"></span> <?php echo esc_js(__('コピーしました！', 'finelive-lp')); ?>';
+                
+                setTimeout(function() {
+                    button.innerHTML = '<span class="dashicons dashicons-clipboard" style="vertical-align: middle;"></span> <?php echo esc_js(__('コピー', 'finelive-lp')); ?>';
+                }, 2000);
+            }
+            </script>
+            
+            <?php if ($post->post_status === 'publish'): ?>
+                <?php $this->render_click_stats($post->ID); ?>
             <?php endif; ?>
         </div>
         <?php
     }
 
     /**
-     * LP統計情報の表示
+     * クリック統計の表示
      *
      * @param int $post_id 投稿ID
      */
-    private function display_lp_statistics($post_id) {
-        $click_data = get_option('flp_lp_click_data', array());
-        $total_clicks = 0;
-        $today_clicks = 0;
-        $week_clicks = 0;
+    private function render_click_stats($post_id) {
+        $click_tracker = new FLP_Click_Tracking();
+        $today_clicks = $click_tracker->get_clicks_count($post_id, 'today');
+        $week_clicks = $click_tracker->get_clicks_count($post_id, 'week');
+        $total_clicks = $click_tracker->get_clicks_count($post_id, 'all');
         
-        $current_date = date('Y-m-d');
-        $week_ago = date('Y-m-d', strtotime('-7 days'));
-        
-        if (isset($click_data[$post_id])) {
-            foreach ($click_data[$post_id] as $date => $date_data) {
-                foreach ($date_data as $button_clicks) {
-                    $clicks = intval($button_clicks);
-                    $total_clicks += $clicks;
-                    
-                    if ($date === $current_date) {
-                        $today_clicks += $clicks;
-                    }
-                    
-                    if ($date >= $week_ago) {
-                        $week_clicks += $clicks;
-                    }
-                }
-            }
-        }
         ?>
-        <ul style="margin: 0; padding-left: 20px;">
-            <li><?php printf(__('今日のクリック数: %s', 'finelive-lp'), '<strong>' . number_format($today_clicks) . '</strong>'); ?></li>
+        <hr style="margin: 15px 0;">
+        <h4 style="margin: 10px 0;"><?php _e('クリック統計', 'finelive-lp'); ?></h4>
+        <ul style="margin: 0; padding: 0; list-style: none;">
+            <li><?php printf(__('今日のクリック: %s', 'finelive-lp'), '<strong>' . number_format($today_clicks) . '</strong>'); ?></li>
             <li><?php printf(__('7日間のクリック数: %s', 'finelive-lp'), '<strong>' . number_format($week_clicks) . '</strong>'); ?></li>
             <li><?php printf(__('総クリック数: %s', 'finelive-lp'), '<strong>' . number_format($total_clicks) . '</strong>'); ?></li>
         </ul>
@@ -272,24 +332,26 @@ class FLP_Meta_Boxes {
 
         // スライダー設定のサニタイズ
         $sanitized['slider_interval'] = absint($input_data['slider_interval'] ?? 4000);
-        
-        // 最小値チェック
-        if ($sanitized['slider_interval'] < 1000) {
-            $sanitized['slider_interval'] = 1000;
-        }
+        $sanitized['slider_interval'] = max(1000, min(10000, $sanitized['slider_interval'])); // 1-10秒の範囲に制限
 
         // 表示期間のサニタイズ
         $sanitized['display_start_date'] = $this->sanitize_date($input_data['display_start_date'] ?? '');
         $sanitized['display_end_date'] = $this->sanitize_date($input_data['display_end_date'] ?? '');
 
-        // ボタンデザインのサニタイズ
+        // ボタンデザイン設定のサニタイズ
         $sanitized['btn_bg_color'] = $this->sanitize_color($input_data['btn_bg_color'] ?? '#ff4081');
         $sanitized['btn_text_color'] = $this->sanitize_color($input_data['btn_text_color'] ?? '#ffffff');
         $sanitized['btn_padding_tb'] = absint($input_data['btn_padding_tb'] ?? 15);
         $sanitized['btn_padding_lr'] = absint($input_data['btn_padding_lr'] ?? 30);
         $sanitized['btn_border_radius'] = absint($input_data['btn_border_radius'] ?? 5);
 
-        return $sanitized;
+        /**
+         * メタデータサニタイズのフィルター
+         *
+         * @param array $sanitized サニタイズ済みデータ
+         * @param array $input_data 元の入力データ
+         */
+        return apply_filters('flp_sanitize_meta_data', $sanitized, $input_data);
     }
 
     /**
@@ -304,15 +366,13 @@ class FLP_Meta_Boxes {
         if (!empty($input_data['static_url']) && is_array($input_data['static_url'])) {
             foreach ($input_data['static_url'] as $index => $url) {
                 $url = esc_url_raw($url);
-                if (empty($url)) {
-                    continue;
+                if (!empty($url)) {
+                    $static_images[] = array(
+                        'url' => $url,
+                        'show_button' => isset($input_data['show_button'][$index]) ? 1 : 0,
+                        'show_slider' => isset($input_data['show_slider'][$index]) ? 1 : 0,
+                    );
                 }
-                
-                $static_images[] = array(
-                    'url' => $url,
-                    'show_button' => isset($input_data['show_button'][$index]) ? 1 : 0,
-                    'show_slider' => isset($input_data['show_slider'][$index]) ? 1 : 0,
-                );
             }
         }
         
