@@ -21,6 +21,7 @@ class FLP_Autoloader {
         'FLP_Usage_Guide'           => 'admin/class-flp-usage-guide.php',
         'FLP_Click_Reports'         => 'admin/class-flp-click-reports.php',
         'FLP_LP_Duplicator'         => 'admin/class-flp-lp-duplicator.php',
+        'FLP_Error_Log_Viewer'      => 'admin/class-flp-error-log-viewer.php',
         
         // フロントエンド関連
         'FLP_Frontend'              => 'frontend/class-flp-frontend.php',
@@ -38,6 +39,9 @@ class FLP_Autoloader {
         // ユーティリティ
         'FLP_Helper'                => 'utils/class-flp-helper.php',
         'FLP_Validator'             => 'utils/class-flp-validator.php',
+        'FLP_Error_Handler'         => 'utils/class-flp-error-handler.php',
+        'FLP_Exception'             => 'utils/class-flp-exception.php',
+        'FLP_Error'                 => 'utils/class-flp-error.php',
     );
 
     /**
@@ -80,47 +84,63 @@ class FLP_Autoloader {
             'data/',
             'utils/',
             'components/',
+            'widgets/',
+            'integrations/',
         );
 
         foreach ($directories as $dir) {
             $file_path = FLP_INCLUDES_DIR . $dir . $file_name;
+            
             if (file_exists($file_path)) {
                 require_once $file_path;
                 return;
             }
         }
+
+        // ファイルが見つからない場合のデバッグ情報
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log(sprintf(
+                'FLP Autoloader: クラス %s のファイルが見つかりません。予想されるファイル名: %s',
+                $class_name,
+                $file_name
+            ));
+        }
     }
 
     /**
-     * クラス名からファイル名を推測
+     * クラス名からファイル名を生成
      *
      * @param string $class_name クラス名
      * @return string ファイル名
      */
     private static function get_file_name_from_class($class_name) {
-        // FLP_Admin_Menu -> class-flp-admin-menu.php
-        $file_name = strtolower($class_name);
-        $file_name = str_replace('_', '-', $file_name);
-        return 'class-' . $file_name . '.php';
+        // FLP_プレフィックスを削除
+        $class_name = str_replace('FLP_', '', $class_name);
+        
+        // アンダースコアをハイフンに変換し、小文字に
+        $file_name = strtolower(str_replace('_', '-', $class_name));
+        
+        // class-プレフィックスとphp拡張子を追加
+        return 'class-flp-' . $file_name . '.php';
     }
 
     /**
-     * 新しいクラスマッピングを追加
+     * 登録されているクラスのリストを取得
      *
-     * @param string $class_name クラス名
-     * @param string $file_path ファイルパス (includes/からの相対パス)
-     */
-    public static function add_class($class_name, $file_path) {
-        self::$class_files[$class_name] = $file_path;
-    }
-
-    /**
-     * 登録されているクラス一覧を取得
-     *
-     * @return array
+     * @return array クラスリスト
      */
     public static function get_registered_classes() {
-        return self::$class_files;
+        return array_keys(self::$class_files);
+    }
+
+    /**
+     * クラスが登録されているかチェック
+     *
+     * @param string $class_name クラス名
+     * @return bool
+     */
+    public static function is_class_registered($class_name) {
+        return isset(self::$class_files[$class_name]);
     }
 }
 
